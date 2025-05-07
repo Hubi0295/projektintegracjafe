@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {useAuth} from "../AuthContext.jsx";
+import {useAuth} from "../../AuthContext.jsx";
 
 export default function Login() {
     const [login, setLogin] = useState('');
@@ -12,18 +12,14 @@ export default function Login() {
             const res = await fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include', // ⬅️ kluczowe!
+                credentials: 'include',
                 body: JSON.stringify({ username: login, password: password })
             });
-
             if (!res.ok) {
                 throw new Error('Błędny login lub hasło');
             }
             setUsername(login);
-            // Po zalogowaniu: np. fetch('/api/me') lub przekierowanie
             console.log('Zalogowano pomyślnie');
-            // Możesz np. przejść na stronę główną:
-            // window.location.href = '/';
         } catch (err) {
             setError(err.message);
         }
