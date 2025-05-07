@@ -1,3 +1,4 @@
+@import "tailwindcss";
 body {
     margin: 0;
     padding: 0;
@@ -22,7 +23,6 @@ body {
     color: white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-
 .maincontent {
     width: 80%;
     height: 100%;
