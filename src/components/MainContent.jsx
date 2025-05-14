@@ -6,7 +6,7 @@ function MainContent() {
     const [minimalSalary, setMinimalSalary] = useState(false);
     const [minimalPension, setMinimalPension] = useState(false);
     const [averagePension, setAveragePension] = useState(false);
-    const [penstionIncapacity, setPenstionIncapacity] = useState(false);
+    const [pensionIncapacity, setPensionIncapacity] = useState(false);
     const [familyAllowance, setFamilyAllowance] = useState(false);
     const [sicknessBenefit, setSicknessBenefit] = useState(false);
     const [unemploymentBenefit, setUnemploymentBenefit] = useState(false);
@@ -28,7 +28,7 @@ function MainContent() {
             minimalSalary,
             minimalPension,
             averagePension,
-            penstionIncapacity,
+            pensionIncapacity,
             familyAllowance,
             sicknessBenefit,
             unemploymentBenefit,
@@ -57,7 +57,7 @@ function MainContent() {
                             <Checkbox label="Płaca minimalna" value={minimalSalary} onChange={setMinimalSalary} />
                             <Checkbox label="Minimalna emerytura" value={minimalPension} onChange={setMinimalPension} />
                             <Checkbox label="Średnia emerytura" value={averagePension} onChange={setAveragePension} />
-                            <Checkbox label="Renta z tytułu niezdolności do pracy" value={penstionIncapacity} onChange={setPenstionIncapacity} />
+                            <Checkbox label="Renta z tytułu niezdolności do pracy" value={pensionIncapacity} onChange={setPensionIncapacity} />
                             <Checkbox label="Zasiłek rodzinny" value={familyAllowance} onChange={setFamilyAllowance} />
                             <Checkbox label="Zasiłek chorobowy" value={sicknessBenefit} onChange={setSicknessBenefit} />
                             <Checkbox label="Zasiłek dla bezrobotnych" value={unemploymentBenefit} onChange={setUnemploymentBenefit} />
