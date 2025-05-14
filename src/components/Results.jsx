@@ -114,148 +114,71 @@ export default function Results() {
             ]
         }
     }
+    function alignData(sourceDates, sourceValues, allLabels) {
+        const dateValueMap = {};
+        sourceDates.forEach((date, index) => {
+            dateValueMap[date] = sourceValues[index];
+        });
+
+        return allLabels.map(date => dateValueMap[date] ?? null);
+    }
+    function getRandomColor() {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
     useEffect(() => {
-
-
         if (chartInstanceRef.current) {
             chartInstanceRef.current.destroy();
         }
         const allDates = [...new Set([
-            ...fakeApi.averageSalary.dates,
-            ...fakeApi.minimalSalary.dates,
-            ...fakeApi.minimalPension.dates,
-            ...fakeApi.averagePension.dates,
-            ...fakeApi.familyAllowance.dates,
-            // ...fakeApi.pensionIncapacity.dates,
-            // ...fakeApi.sicknessBenefit.dates,
-            ...fakeApi.unemploymentBenefit.dates,
-            ...fakeApi.inflation.dates,
-            ...fakeApi.pkb.dates,
-            ...fakeApi.pkbPerCapita.dates,
-            ...fakeApi.ppp.dates,
-            ...fakeApi.pppPerCapita.dates
-        ])].sort((a, b) => new Date(a) - new Date(b));
-
-// Funkcja dopasowująca wartości do wspólnej listy dat
-        function alignData(sourceDates, sourceValues, allLabels) {
-            const dateValueMap = {};
-            sourceDates.forEach((date, index) => {
-                dateValueMap[date] = sourceValues[index];
-            });
-
-            return allLabels.map(date => dateValueMap[date] ?? null);
-        }
-
+        ])];
+        const allData = []
+        Object.keys(fakeApi).map((key) => {
+            try{
+                allDates.push(...fakeApi[key].dates);
+            }
+            catch (e){
+                console.log(e);
+            }
+        });
+        allDates.sort((a, b) => new Date(a) - new Date(b));
+        let kolor = getRandomColor();
+        Object.keys(fakeApi).map((key) => {
+            kolor = getRandomColor();
+            try{
+                if(key==="inflation"){
+                    allData.push({
+                        label: key,
+                        data: alignData(fakeApi[key].dates, fakeApi[key].values, allDates),
+                        borderColor: kolor,
+                        backgroundColor: kolor,
+                        spanGaps:true,
+                        yAxisID: 'y1'
+                    })
+                }
+                else{
+                    allData.push({
+                        label: key,
+                        data: alignData(fakeApi[key].dates, fakeApi[key].values, allDates),
+                        borderColor: kolor,
+                        backgroundColor: kolor,
+                        spanGaps:true,
+                        yAxisID: 'y'
+                    })
+                }
+            }
+            catch (e){
+                console.log(e);
+            }
+        });
+        console.log(allData)
 
         const data = {
             labels: allDates,
-            datasets: [
-
-                {
-                    label: 'Średnia pensja',
-                    data: alignData(fakeApi.averageSalary.dates, fakeApi.averageSalary.values, allDates),
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Minimalna pensja',
-                    data: alignData(fakeApi.minimalSalary.dates, fakeApi.minimalSalary.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Minimalna emerytura',
-                    data: alignData(fakeApi.minimalPension.dates, fakeApi.minimalPension.values, allDates),
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Średnia emerytura',
-                    data: alignData(fakeApi.averagePension.dates, fakeApi.averagePension.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                // {
-                //     label: 'Niezdolnosc do pracy',
-                //     data: alignData(fakeApi.pensionIncapacity.dates, fakeApi.pensionIncapacity.values, allDates),
-                //     borderColor: 'rgb(75, 192, 192)',
-                //     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                //     spanGaps:true,
-                //     yAxisID: 'y'
-                // },
-                {
-                    label: 'Zasiłek rodzinny',
-                    data: alignData(fakeApi.familyAllowance.dates, fakeApi.familyAllowance.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                // {
-                //     label: 'Zasiłek chorobowy',
-                //     data: alignData(fakeApi.sicknessBenefit.dates, fakeApi.sicknessBenefit.values, allDates),
-                //     borderColor: 'rgb(75, 192, 192)',
-                //     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                //     spanGaps:true,
-                //     yAxisID: 'y'
-                // },
-                {
-                    label: 'Zasiłek bezrobotny',
-                    data: alignData(fakeApi.unemploymentBenefit.dates, fakeApi.unemploymentBenefit.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Inflacja',
-                    data: alignData(fakeApi.inflation.dates, fakeApi.inflation.values, allDates),
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y1'
-                },
-                {
-                    label: 'PKB',
-                    data: alignData(fakeApi.pkb.dates, fakeApi.pkb.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'PKB per Caipta',
-                    data: alignData(fakeApi.pkbPerCapita.dates, fakeApi.pkbPerCapita.values, allDates),
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'PPP',
-                    data: alignData(fakeApi.ppp.dates, fakeApi.ppp.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'PPP per capita',
-                    data: alignData(fakeApi.pppPerCapita.dates, fakeApi.pppPerCapita.values, allDates),
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    spanGaps:true,
-                    yAxisID: 'y'
-                },
-            ]
+            datasets: allData
         };
         chartInstanceRef.current = new Chart(chartRef.current, {
             type: 'line',
@@ -268,7 +191,7 @@ export default function Results() {
                     },
                     title: {
                         display: true,
-                        text: 'Chart.js Line Chart'
+                        text: 'Porownanie danych i wskaznikow'
                     }
                 },
                 scales: {
@@ -282,7 +205,7 @@ export default function Results() {
                         display: true,
                         position: 'right',
                         grid: {
-                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                            drawOnChartArea: false,
                         },
                     },
                 }
