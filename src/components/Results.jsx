@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import Button from "./Button.jsx";
 import TextArea from "./TextArea.jsx";
+import {useLocation} from "react-router-dom";
 
 export default function Results() {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
+    const location = useLocation();
+    const { state } = location;
     const fakeApi = {
         "averageSalary": {
             "values":[1000,2000,3000,5000,8000],
@@ -130,6 +133,7 @@ export default function Results() {
     }
 
     useEffect(() => {
+        console.log(state)
         if (chartInstanceRef.current) {
             chartInstanceRef.current.destroy();
         }
@@ -141,7 +145,6 @@ export default function Results() {
                 allDates.push(...fakeApi[key].dates);
             }
             catch (e){
-                console.log(e);
             }
         });
         allDates.sort((a, b) => new Date(a) - new Date(b));
@@ -171,10 +174,8 @@ export default function Results() {
                 }
             }
             catch (e){
-                console.log(e);
             }
         });
-        console.log(allData)
 
         const data = {
             labels: allDates,

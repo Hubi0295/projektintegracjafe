@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Checkbox from "./Checkbox.jsx";
+import RadioButton from "./RadioButton.jsx";
+import {useNavigate} from "react-router-dom";
 
 function MainContent() {
     const [averageSalary, setAverageSalary] = useState(false);
@@ -7,18 +9,13 @@ function MainContent() {
     const [minimalPension, setMinimalPension] = useState(false);
     const [averagePension, setAveragePension] = useState(false);
     const [pensionIncapacity, setPensionIncapacity] = useState(false);
-    const [familyAllowance, setFamilyAllowance] = useState(false);
+    const [careAllowance, setCareAllowance] = useState(false);
     const [sicknessBenefit, setSicknessBenefit] = useState(false);
     const [unemploymentBenefit, setUnemploymentBenefit] = useState(false);
-
-    const [inflation, setInflation] = useState(false);
-    const [pkb, setPkb] = useState(false);
-    const [pkbPerCapita, setPkbPerCapita] = useState(false);
-    const [ppp, setPpp] = useState(false);
-    const [pppPerCapita, setPppPerCapita] = useState(false);
-
+    const [economyMark, setEconomyMark] = useState("");
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,22 +26,18 @@ function MainContent() {
             minimalPension,
             averagePension,
             pensionIncapacity,
-            familyAllowance,
+            careAllowance,
             sicknessBenefit,
             unemploymentBenefit,
-            inflation,
-            pkb,
-            pkbPerCapita,
-            ppp,
-            pppPerCapita,
+            economyMark,
             dateFrom,
             dateTo
         };
-
-        console.log('Wybrane filtry:', filters);
+        navigate('/results', { state: filters });
     };
     
     return (
+        <>
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-6 p-4 border rounded shadow">
             <h2 className="text-xl font-bold">Filtruj dane</h2>
 
@@ -53,25 +46,25 @@ function MainContent() {
                     <fieldset className="border p-3 rounded">
                         <legend className="font-medium">Świadczenia</legend>
                         <div className="flex flex-col">
-                            <Checkbox label="Średnia pensja" value={averageSalary} onChange={setAverageSalary} />
-                            <Checkbox label="Płaca minimalna" value={minimalSalary} onChange={setMinimalSalary} />
-                            <Checkbox label="Minimalna emerytura" value={minimalPension} onChange={setMinimalPension} />
-                            <Checkbox label="Średnia emerytura" value={averagePension} onChange={setAveragePension} />
-                            <Checkbox label="Renta z tytułu niezdolności do pracy" value={pensionIncapacity} onChange={setPensionIncapacity} />
-                            <Checkbox label="Zasiłek rodzinny" value={familyAllowance} onChange={setFamilyAllowance} />
-                            <Checkbox label="Zasiłek chorobowy" value={sicknessBenefit} onChange={setSicknessBenefit} />
-                            <Checkbox label="Zasiłek dla bezrobotnych" value={unemploymentBenefit} onChange={setUnemploymentBenefit} />
+                            <Checkbox value="Średnia pensja" onChange={setAverageSalary} />
+                            <Checkbox value="Płaca minimalna" onChange={setMinimalSalary} />
+                            <Checkbox value="Minimalna emerytura" onChange={setMinimalPension} />
+                            <Checkbox value="Średnia emerytura" onChange={setAveragePension} />
+                            <Checkbox value="Renta z tytułu niezdolności do pracy" onChange={setPensionIncapacity} />
+                            <Checkbox value="Zasiłek pielęgnacyjny" onChange={setCareAllowance} />
+                            <Checkbox value="Zasiłek chorobowy" onChange={setSicknessBenefit} />
+                            <Checkbox value="Zasiłek dla bezrobotnych" onChange={setUnemploymentBenefit} />
                         </div>
                     </fieldset>
 
                     <fieldset className="border p-3 rounded">
                         <legend className="font-medium">Wskaźniki makroekonomiczne</legend>
                         <div className="flex flex-col">
-                            <Checkbox label="Inflacja" value={inflation} onChange={setInflation} />
-                            <Checkbox label="PKB" value={pkb} onChange={setPkb} />
-                            <Checkbox label="PKB per capita" value={pkbPerCapita} onChange={setPkbPerCapita} />
-                            <Checkbox label="PPP" value={ppp} onChange={setPpp} />
-                            <Checkbox label="PPP per capita" value={pppPerCapita} onChange={setPppPerCapita} />
+                            <RadioButton nameR="economyMark"  label="Inflacja" value="inflation" onChange={setEconomyMark} />
+                            <RadioButton nameR="economyMark"  label="PKB" value="pkb" onChange={setEconomyMark} />
+                            <RadioButton nameR="economyMark"  label="PKB per capita" value="pkbPerCapita" onChange={setEconomyMark} />
+                            <RadioButton nameR="economyMark"  label="PPP" value="ppp" onChange={setEconomyMark} />
+                            <RadioButton nameR="economyMark"  label="PPP per capita" value="pppPerCapita" onChange={setEconomyMark} />
                         </div>
                     </fieldset>
                 </div>
@@ -104,6 +97,7 @@ function MainContent() {
                 </button>
             </div>
         </form>
+    </>
 );
 }
 

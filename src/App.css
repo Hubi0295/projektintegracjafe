@@ -19,7 +19,8 @@ body {
     height: 100%;
     background-color: #4A90E2;
     border-radius: 20px;
-    padding: 20px;
+    padding: 3px;
+    padding-left: 15px;
     color: white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }

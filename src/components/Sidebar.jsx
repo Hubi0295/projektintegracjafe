@@ -4,6 +4,7 @@ import React from "react";
 import Autologin from "./Auth/Autologin.jsx";
 import {useAuth} from "../AuthContext.jsx";
 import Logout from "./Auth/Logout.jsx";
+import UsersSearches from "./UsersSearches.jsx";
 
 export default function Sidebar() {
     const navigate = useNavigate();
@@ -19,9 +20,11 @@ export default function Sidebar() {
                 <nav>
                     <ul>
                         <li><Autologin/></li>
+
                         {username ?
                             <>
                                 <li><Logout/></li>
+                                <UsersSearches username={username}/>
                             </>
                             :
                             <>
