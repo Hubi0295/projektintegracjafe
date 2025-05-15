@@ -26,15 +26,9 @@ export default function Results() {
             "values": [880, 1020, 1180, 1400, 1650],
             "dates": ["2010-05-30", "2012-12-11", "2016-01-19", "2019-03-05", "2023-01-14"]
         },
-        "pensionIncapacity": {
-
-        },
-        "familyAllowance": {
+        "careAllowance": {
             "values": [90, 100, 115, 130, 150],
             "dates": ["2012-01-01", "2014-05-14", "2016-10-10", "2018-12-25", "2023-06-06"]
-        },
-        "sicknessBenefit": {
-
         },
         "unemploymentBenefit": {
             "values": [500, 580, 660, 740, 820],
@@ -131,7 +125,6 @@ export default function Results() {
         const b = Math.floor(Math.random() * 256);
         return `rgb(${r}, ${g}, ${b})`;
     }
-
     useEffect(() => {
         console.log(state)
         if (chartInstanceRef.current) {
@@ -152,7 +145,7 @@ export default function Results() {
         Object.keys(fakeApi).map((key) => {
             kolor = getRandomColor();
             try{
-                if(key==="inflation"){
+                if(key==="inflation"  || key==="pkb" || key==="pkbPerCapita" || key==="ppp" || key==="pppPerCapita"  ){
                     allData.push({
                         label: key,
                         data: alignData(fakeApi[key].dates, fakeApi[key].values, allDates),

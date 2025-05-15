@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Checkbox from "./Checkbox.jsx";
-import RadioButton from "./RadioButton.jsx";
 import {useNavigate} from "react-router-dom";
 
 function MainContent() {
@@ -8,15 +7,22 @@ function MainContent() {
     const [minimalSalary, setMinimalSalary] = useState(false);
     const [minimalPension, setMinimalPension] = useState(false);
     const [averagePension, setAveragePension] = useState(false);
-    const [pensionIncapacity, setPensionIncapacity] = useState(false);
     const [careAllowance, setCareAllowance] = useState(false);
-    const [sicknessBenefit, setSicknessBenefit] = useState(false);
     const [unemploymentBenefit, setUnemploymentBenefit] = useState(false);
-    const [economyMark, setEconomyMark] = useState("");
-    const [dateFrom, setDateFrom] = useState('');
+    const [inflation, setInflation] = useState(false);
+    const [pkb, setPkb] = useState(false);
+    const [pkbPerCapita, setPkbPerCapita] = useState(false);
+    const [ppp, setPpp] = useState(false);
+    const [pppPerCapita, setPppPerCapita] = useState('');
     const [dateTo, setDateTo] = useState('');
+    const [dateFrom, setDateFrom] = useState('');
+    const [globalNews, setGlobalNews] = useState([]);
+    const [polishNews, setPolishNews] = useState([]);
     const navigate = useNavigate();
-
+    useEffect(() => {
+        setPolishNews([{"abc":10},{"asss":123}]);
+        setGlobalNews([{"abceff":10},{"asssasdasdad":123}]);
+    }, []);
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -25,11 +31,15 @@ function MainContent() {
             minimalSalary,
             minimalPension,
             averagePension,
-            pensionIncapacity,
             careAllowance,
-            sicknessBenefit,
             unemploymentBenefit,
-            economyMark,
+            pkb,
+            pkbPerCapita,
+            ppp,
+            pppPerCapita,
+            inflation,
+            polishNews,
+            globalNews,
             dateFrom,
             dateTo
         };
@@ -50,9 +60,7 @@ function MainContent() {
                             <Checkbox value="Płaca minimalna" onChange={setMinimalSalary} />
                             <Checkbox value="Minimalna emerytura" onChange={setMinimalPension} />
                             <Checkbox value="Średnia emerytura" onChange={setAveragePension} />
-                            <Checkbox value="Renta z tytułu niezdolności do pracy" onChange={setPensionIncapacity} />
                             <Checkbox value="Zasiłek pielęgnacyjny" onChange={setCareAllowance} />
-                            <Checkbox value="Zasiłek chorobowy" onChange={setSicknessBenefit} />
                             <Checkbox value="Zasiłek dla bezrobotnych" onChange={setUnemploymentBenefit} />
                         </div>
                     </fieldset>
@@ -60,11 +68,11 @@ function MainContent() {
                     <fieldset className="border p-3 rounded">
                         <legend className="font-medium">Wskaźniki makroekonomiczne</legend>
                         <div className="flex flex-col">
-                            <RadioButton nameR="economyMark"  label="Inflacja" value="inflation" onChange={setEconomyMark} />
-                            <RadioButton nameR="economyMark"  label="PKB" value="pkb" onChange={setEconomyMark} />
-                            <RadioButton nameR="economyMark"  label="PKB per capita" value="pkbPerCapita" onChange={setEconomyMark} />
-                            <RadioButton nameR="economyMark"  label="PPP" value="ppp" onChange={setEconomyMark} />
-                            <RadioButton nameR="economyMark"  label="PPP per capita" value="pppPerCapita" onChange={setEconomyMark} />
+                            <Checkbox value="inflation" onChange={setInflation} />
+                            <Checkbox value="pkb" onChange={setPkb} />
+                            <Checkbox value="pkbPerCapita" onChange={setPkbPerCapita} />
+                            <Checkbox value="ppp" onChange={setPpp} />
+                            <Checkbox value="pppPerCapita" onChange={setPppPerCapita} />
                         </div>
                     </fieldset>
                 </div>
