@@ -4,6 +4,31 @@ import Button from "./Button.jsx";
 import TextArea from "./TextArea.jsx";
 import {useLocation} from "react-router-dom";
 
+function alignData(sourceDates, sourceValues, allLabels) {
+    const dateValueMap = {};
+    sourceDates.forEach((date, index) => {
+        dateValueMap[date] = sourceValues[index];
+    });
+
+    return allLabels.map(date => dateValueMap[date] ?? null);
+}
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+function exportToJson(jsonData){
+    const json = JSON.stringify(jsonData, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'data.json';
+    link.click();
+};
+
+
 export default function Results() {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
@@ -111,20 +136,7 @@ export default function Results() {
             ]
         }
     }
-    function alignData(sourceDates, sourceValues, allLabels) {
-        const dateValueMap = {};
-        sourceDates.forEach((date, index) => {
-            dateValueMap[date] = sourceValues[index];
-        });
 
-        return allLabels.map(date => dateValueMap[date] ?? null);
-    }
-    function getRandomColor() {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        return `rgb(${r}, ${g}, ${b})`;
-    }
     useEffect(() => {
         console.log(state)
         if (chartInstanceRef.current) {
@@ -209,14 +221,13 @@ export default function Results() {
             chartInstanceRef.current?.destroy();
         };
     }, []);
-
     return(
         <>
             <div className="maincontent">
                 <h1>Wyniki</h1>
                 <canvas ref={chartRef}></canvas>
-                <Button text="Eksport do JSON" action={() => console.log("Eksport do JSON")}/>
-                <Button text="Eksport do XML" action={() => console.log("Eksport do XML")}/>
+                <Button text="Eksport do JSON" action={()=>exportToJson(fakeApi)}/>
+                <Button text="Eksport do XML" action={()=>console.log("eksport xml")}/>
             </div>
             <div>
                 {fakeApi.globalNews.articles.map((article, index) => (
