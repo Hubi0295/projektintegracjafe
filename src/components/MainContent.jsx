@@ -16,14 +16,8 @@ function MainContent() {
     const [pppPerCapita, setPppPerCapita] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [dateFrom, setDateFrom] = useState('');
-    const [globalNews, setGlobalNews] = useState([]);
-    const [polishNews, setPolishNews] = useState([]);
     const navigate = useNavigate();
-    useEffect(() => {
-        setPolishNews([{"abc":10},{"asss":123}]);
-        setGlobalNews([{"abceff":10},{"asssasdasdad":123}]);
-    }, []);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const filters = {
@@ -38,12 +32,17 @@ function MainContent() {
             ppp,
             pppPerCapita,
             inflation,
-            polishNews,
-            globalNews,
             dateFrom,
             dateTo
         };
-        navigate('/results', { state: filters });
+        const params = new URLSearchParams(filters).toString();
+        const url = `http://localhost:3000/api/test?${params}`;
+        const respon = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        const data = await respon.json();
+        navigate('/results', { state: data });
     };
     
     return (
@@ -81,7 +80,7 @@ function MainContent() {
                     <div>
                         <label className="block font-medium">Data od:</label>
                         <input
-                            type="date"
+                            type="month"
                             value={dateFrom}
                             onChange={(e) => setDateFrom(e.target.value)}
                             className="border rounded p-2 w-full"
@@ -90,7 +89,7 @@ function MainContent() {
                     <div>
                         <label className="block font-medium">Data do:</label>
                         <input
-                            type="date"
+                            type="month"
                             value={dateTo}
                             onChange={(e) => setDateTo(e.target.value)}
                             className="border rounded p-2 w-full"

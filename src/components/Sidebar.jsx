@@ -20,11 +20,23 @@ export default function Sidebar() {
                 <nav>
                     <ul>
                         <li><Autologin/></li>
-
+                        <li><Link to="/"><Button text="Strona glowna" action={() => console.log("Strona")}/></Link></li>
+                        <li><Button text="Eksport z bazy" action={
+                            async () => {
+                                const respo = await fetch("http://localhost:3000/api/latest");
+                                const dataFromBack = await respo.json();
+                                const json = JSON.stringify(dataFromBack, null, 2);
+                                const blob = new Blob([json], { type: 'application/json' });
+                                const link = document.createElement('a');
+                                link.href = URL.createObjectURL(blob);
+                                link.download = 'dataLast5RequestResponse.json';
+                                link.click();
+                            }
+                        }></Button></li>
                         {username ?
                             <>
                                 <li><Logout/></li>
-                                <UsersSearches username={username}/>
+                                <UsersSearches/>
                             </>
                             :
                             <>
@@ -35,10 +47,6 @@ export default function Sidebar() {
                             </>
                         }
 
-                        <li><Link to="/"><Button text="Strona glowna" action={() => console.log("Strona")}/></Link></li>
-                        <li><Link to="/results"><Button text="Wyniki" action={() => console.log("Rezultaty")}/></Link>
-                        </li>
-                        <li><Button text="Eksport z bazy" action={() => console.log("Eksport")}></Button></li>
 
                     </ul>
                 </nav>
