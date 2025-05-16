@@ -3,7 +3,7 @@ import Chart from "chart.js/auto";
 import Button from "./Button.jsx";
 import TextArea from "./TextArea.jsx";
 import {useLocation} from "react-router-dom";
-
+import builder from "xmlbuilder"
 function alignData(sourceDates, sourceValues, allLabels) {
     const dateValueMap = {};
     sourceDates.forEach((date, index) => {
@@ -28,13 +28,61 @@ function exportToJson(jsonData){
     link.click();
 };
 
+function exportToXml(jsonData){
+    const doc = builder.create("data");
+    doc.ele("Download-date")
+        .txt(Date())
+        .up()
+    Object.keys(jsonData).forEach((key) => {
+        const section = doc.ele(key);
+        try {
+            if (key==="date"){
+                section.txt(jsonData[key])
+            }
+            if (Array.isArray(jsonData[key].articles)) {
+                jsonData[key].articles.forEach((article) => {
+                    const articleElement = section.ele("article");
+                    Object.keys(article).forEach((prop) => {
+                        if (typeof article[prop] === "object" && article[prop] !== null) {
+                            const nested = articleElement.ele(prop);
+                            Object.keys(article[prop]).forEach((nestedKey) => {
+                                nested.ele(nestedKey).txt(article[prop][nestedKey]).up();
+                            });
+                        } else {
+                            articleElement.ele(prop).txt(article[prop]).up();
+                        }
+                    });
+                });
+            }
+            else if (
+                Array.isArray(jsonData[key].dates) &&
+                Array.isArray(jsonData[key].values)
+            ) {
+                for (let i = 0; i < jsonData[key].dates.length; i++) {
+                    section.ele("value", { date: jsonData[key].dates[i] })
+                        .txt(jsonData[key].values[i])
+                        .up();
+                }
+            }
+
+        } catch (e) {
+            console.log("Błąd przy przetwarzaniu klucza:", key, e);
+        }
+    });
+    const blob = new Blob([doc], { type: 'application/xml' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'data.xml';
+    link.click();
+
+}
+
 
 export default function Results() {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const location = useLocation();
     const { state } = location;
-
     useEffect(() => {
         console.log(state)
         if (chartInstanceRef.current) {
@@ -125,7 +173,7 @@ export default function Results() {
                 <h1>Wyniki</h1>
                 <canvas ref={chartRef}></canvas>
                 <Button text="Eksport do JSON" action={()=>exportToJson(state)}/>
-                <Button text="Eksport do XML" action={()=>console.log("eksport xml")}/>
+                <Button text="Eksport do XML" action={()=>exportToXml(state)}/>
             </div>
             <div className="overflow-scroll border p-4 rounded-xl">
                 {state.globalNews.articles.map((article, index) => (

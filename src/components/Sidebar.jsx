@@ -21,20 +21,20 @@ export default function Sidebar() {
                     <ul>
                         <li><Autologin/></li>
                         <li><Link to="/"><Button text="Strona glowna" action={() => console.log("Strona")}/></Link></li>
-                        <li><Button text="Eksport z bazy" action={
-                            async () => {
-                                const respo = await fetch("http://localhost:3000/api/latest");
-                                const dataFromBack = await respo.json();
-                                const json = JSON.stringify(dataFromBack, null, 2);
-                                const blob = new Blob([json], { type: 'application/json' });
-                                const link = document.createElement('a');
-                                link.href = URL.createObjectURL(blob);
-                                link.download = 'dataLast5RequestResponse.json';
-                                link.click();
-                            }
-                        }></Button></li>
                         {username ?
                             <>
+                                <li><Button text="Eksport z bazy" action={
+                                    async () => {
+                                        const respo = await fetch("http://localhost:3000/api/latest");
+                                        const dataFromBack = await respo.json();
+                                        const json = JSON.stringify(dataFromBack, null, 2);
+                                        const blob = new Blob([json], {type: 'application/json'});
+                                        const link = document.createElement('a');
+                                        link.href = URL.createObjectURL(blob);
+                                        link.download = 'dataLast5RequestResponse.json';
+                                        link.click();
+                                    }
+                                }></Button></li>
                                 <li><Logout/></li>
                                 <UsersSearches/>
                             </>

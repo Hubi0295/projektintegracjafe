@@ -1,11 +1,13 @@
 import { useState } from "react";
 import {useAuth} from "../../AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
 
 export default function Login() {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { setUsername } = useAuth();
+    const navigate = useNavigate();
     async function handleSubmit(e) {
         e.preventDefault();
         try {
@@ -20,6 +22,7 @@ export default function Login() {
             }
             setUsername(login);
             console.log('Zalogowano pomyślnie');
+            navigate("/");
         } catch (err) {
             setError(err.message);
         }
@@ -51,7 +54,7 @@ export default function Login() {
                     />
                 </div>
                 {error && <div className="text-red-500 text-sm">{error}</div>}
-                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded cursor-pointer">
                     Zaloguj się
                 </button>
             </form>
