@@ -25,7 +25,10 @@ export default function Sidebar() {
                             <>
                                 <li><Button text="Eksport z bazy" action={
                                     async () => {
-                                        const respo = await fetch("http://localhost:3000/api/latest");
+                                        const respo = await fetch("http://localhost:3000/api/latest",{
+                                            credentials:'include',
+                                            method:'GET'
+                                        });
                                         const dataFromBack = await respo.json();
                                         const json = JSON.stringify(dataFromBack, null, 2);
                                         const blob = new Blob([json], {type: 'application/json'});

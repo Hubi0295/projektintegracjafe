@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Chart from "chart.js/auto";
 import Button from "./Button.jsx";
 import TextArea from "./TextArea.jsx";
@@ -83,6 +83,8 @@ export default function Results() {
     const chartInstanceRef = useRef(null);
     const location = useLocation();
     const { state } = location;
+    const [global, setGlobal] = useState(null);
+    const [polish, setPolish] = useState(null);
     useEffect(() => {
         console.log(state)
         if (chartInstanceRef.current) {
@@ -113,6 +115,12 @@ export default function Results() {
                         yAxisID: 'y1'
                     })
                 }
+                else if(allData['globalNews']){
+                    setGlobal(allData['globalNews'])
+                }
+                else if(allData['polishNews']){
+                    setPolish(allData['polishNews'])
+                }
                 else{
                     allData.push({
                         label: key,
@@ -123,11 +131,11 @@ export default function Results() {
                         yAxisID: 'y'
                     })
                 }
+
             }
             catch (e){
             }
         });
-
         const data = {
             labels: allDates,
             datasets: allData
@@ -168,22 +176,31 @@ export default function Results() {
         };
     }, [state]);
     return(
-        <>
-            <div className="maincontent">
-                <h1>Wyniki</h1>
-                <canvas ref={chartRef}></canvas>
-                <Button text="Eksport do JSON" action={()=>exportToJson(state)}/>
-                <Button text="Eksport do XML" action={()=>exportToXml(state)}/>
-            </div>
-            <div className="overflow-scroll border p-4 rounded-xl">
-                {state.globalNews.articles.map((article, index) => (
-                    <TextArea key={`global-${index}`} props={article}/>
-                ))}
+            <>
+                <div className="maincontent">
+                    <h1>Wyniki</h1>
+                    <canvas ref={chartRef}></canvas>
+                    <Button text="Eksport do JSON" action={() => exportToJson(state)} />
+                    <Button text="Eksport do XML" action={() => exportToXml(state)} />
+                </div>
 
-                {state.polishNews.articles.map((article, index) => (
-                    <TextArea key={`polish-${index}`} props={article}/>
-                ))}
-            </div>
-        </>
+                <div className="overflow-scroll border p-4 rounded-xl">
+                    {global ? (
+                        state.global.articles.map((article, index) => (
+                            <TextArea key={`global-${index}`} props={article} />
+                        ))
+                    ) : (
+                        <p>Brak informacji ze świata</p>
+                    )}
+
+                    {polish ? (
+                        state.polish.articles.map((article, index) => (
+                            <TextArea key={`polish-${index}`} props={article} />
+                        ))
+                    ) : (
+                        <p>Brak informacji z Polski</p>
+                    )}
+                </div>
+            </>
     );
 }
