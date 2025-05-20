@@ -115,11 +115,11 @@ export default function Results() {
                         yAxisID: 'y1'
                     })
                 }
-                else if(allData['globalNews']){
-                    setGlobal(allData['globalNews'])
+                else if(key === 'globalNews'){
+                    setGlobal(1)
                 }
-                else if(allData['polishNews']){
-                    setPolish(allData['polishNews'])
+                else if(key === 'polishNews'){
+                    setPolish(1)
                 }
                 else{
                     allData.push({
@@ -186,7 +186,7 @@ export default function Results() {
 
                 <div className="overflow-scroll border p-4 rounded-xl">
                     {global ? (
-                        state.global.articles.map((article, index) => (
+                        state.globalNews.articles.map((article, index) => (
                             <TextArea key={`global-${index}`} props={article} />
                         ))
                     ) : (
@@ -194,7 +194,7 @@ export default function Results() {
                     )}
 
                     {polish ? (
-                        state.polish.articles.map((article, index) => (
+                        state.polishNews.articles.map((article, index) => (
                             <TextArea key={`polish-${index}`} props={article} />
                         ))
                     ) : (
